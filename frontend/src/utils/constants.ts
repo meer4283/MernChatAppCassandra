@@ -1,6 +1,7 @@
 
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL
+export const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
 export const COOKIE_DOMAIN = process.env.NEXT_PUBLIC_COOKIE_DOMAIN
 export const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL
 export const ENVIRONMENT_PROD = !(process.env.NODE_ENV === "development")
