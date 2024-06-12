@@ -1,0 +1,8 @@
+{
+    "addUser": "/users/",
+    "updateUser": "/users/",
+    "getPaginatedUserList": "/users/list/paginated",
+    "deleteUser": "/users/",
+    "getUserById": "/users/",
+    "getSelectedUserById": "/users/"
+}
