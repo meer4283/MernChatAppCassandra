@@ -13,7 +13,9 @@ class MessageController {
 
   async sendMessage(req, res) {
     try {
-      const { userId, username, content } = req.body;
+      const { id:userId, username } = req.user;
+      // console.log("req.user", req.user);
+      const { content } = req.body;
       const message = await messageService.sendMessage(userId, username, content);
       res.status(201).json(message);
     } catch (error) {

@@ -13,6 +13,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 import StoreProvider from "@/store/StoreProvider";
 import ToastProvider from "@/component/general/ToastProvider";
+import { SocketProvider } from "@/context/SocketProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -31,8 +32,10 @@ export default function RootLayout({
         <PrimeReactProvider>
           <StoreProvider>
             <ToastProvider>
-              {children}
-           </ToastProvider>
+              <SocketProvider>
+                {children}
+              </SocketProvider>
+            </ToastProvider>
           </StoreProvider>
         </PrimeReactProvider>
       </body>

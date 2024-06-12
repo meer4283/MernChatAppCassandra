@@ -86,19 +86,18 @@ export const addUserInfoIntoFirebase = (userInfo: any) => (dispatch: any) => {
         .catch((e: any) => {})
         .finally(() => {});
 };
+
+
 export const authenticateUser = (userInfo: any, router:any) => (dispatch: any) => {
     const Login = new useHttp(false);
     dispatch(LoginLoading());
-    Login.post('/signin', userInfo)
+    Login.post('/signin', {...userInfo, username: userInfo?.email})
         .then((res: any) => {
             const data = res.data;
 
             if ('accessToken' in data) {
                 saveCookieData({ localKey: 'accessToken', value: data?.accessToken });
-                saveCookieData({ localKey: 'refreshToken', value: data?.accessToken });
-                console.log("Login");
-                router.push("/dashboard")
-
+               router.push("/chat")
                 dispatch({
                     type: LOGGED_IN,
                     payload: {
@@ -109,12 +108,32 @@ export const authenticateUser = (userInfo: any, router:any) => (dispatch: any) =
                     }
                 });
             }
+            else{
+                dispatch({
+                    type: GLOBAL_TOAST,
+                    payLoad: {
+                      showToast: true,
+                      toastMessage: data?.message,
+                      toastDetail: null,
+                      toastType: "warning",
+                    },
+                  });
+            }
         })
         .catch((e: any) => {
             console.log("e", e);
             dispatch({
+                type: GLOBAL_TOAST,
+                payLoad: {
+                  showToast: true,
+                  toastMessage: e.response?.data?.error,
+                  toastDetail: null,
+                  toastType: "warning",
+                },
+              });
+            dispatch({
                 type: LOGIN_INVALID,
-                payload: { error: e.response?.data?.message, success: false }
+                payload: { error: e.response?.data?.error, success: false }
             });
         })
         .finally(() => {
@@ -127,34 +146,43 @@ export const authenticateUser = (userInfo: any, router:any) => (dispatch: any) =
 export const registerUser = (userInfo: any) => (dispatch: any) => {
     const Login = new useHttp(false);
     dispatch(LoginLoading());
-    Login.post('/signup', userInfo)
+    Login.post('/register', userInfo)
         .then((res: any) => {
             const data = res.data;
 
-            if ('accessToken' in data) {
-                saveCookieData({ localKey: 'accessToken', value: data?.accessToken });
-                saveCookieData({ localKey: 'refreshToken', value: data?.accessToken });
+            if ('id' in data) {
                 dispatch({
-                    type: LOGGED_IN,
-                    payload: {
-                        error: false,
-                        success: true,
-                        isLoggedIn: true,
-                        ...data
-                    }
-                });
+                    type: GLOBAL_TOAST,
+                    payLoad: {
+                      showToast: true,
+                      toastMessage: "Registered",
+                      toastDetail: null,
+                      toastType: "success",
+                    },
+                  });
+            }
+            else{
+                dispatch({
+                    type: GLOBAL_TOAST,
+                    payLoad: {
+                      showToast: true,
+                      toastMessage: data?.message,
+                      toastDetail: null,
+                      toastType: "warning",
+                    },
+                  });
             }
         })
         .catch((e: any) => {
             dispatch({
                 type: LOGIN_INVALID,
-                payload: { error: e.response?.data?.message, success: false }
+                payload: { error: e.response?.error, success: false }
             });
             dispatch({
                 type: GLOBAL_TOAST,
                 payLoad: {
                   showToast: true,
-                  toastMessage: e.response?.data?.message,
+                  toastMessage: e.response?.error,
                   toastDetail: null,
                   toastType: "error",
                 },

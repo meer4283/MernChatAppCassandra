@@ -6,7 +6,7 @@ class UserRepository {
   }
 
   async getUserByUsername(username) {
-    const query = 'SELECT * FROM users WHERE username = ?';
+    const query = 'SELECT * FROM users WHERE username = ? ALLOW FILTERING';
     const result = await client.execute(query, [username], { prepare: true });
     return result.rows[0];
   }

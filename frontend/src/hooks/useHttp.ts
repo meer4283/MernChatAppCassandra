@@ -82,7 +82,7 @@ class useHttp {
                             if (response.data?.accessToken) {
                                 saveCookieData({ localKey: 'accessToken', value: response.data.accessToken })
                                 saveCookieData({ localKey: 'refreshToken', value: response.data.refreshToken })
-                                error.config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+                                error.config.headers.Authorization = `${response.data.accessToken}`;
                                 this.getAccessToken();
                                 this.setRefreshToken(response.data.refreshToken);
                             }
@@ -157,7 +157,7 @@ class useHttp {
     getAccessToken() {
         this.accessToken =  this.withCredentials ? getCookieData({ localKey: "accessToken" }) : null;
         this.refreshToken =  this.withCredentials ? this.getRefreshToken() : null;
-        this.token = this.withCredentials ? `Bearer ${this.accessToken}` : null
+        this.token = this.withCredentials ? `${this.accessToken}` : null
     }
 
     getRefreshToken() {

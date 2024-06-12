@@ -5,7 +5,7 @@ import { JwtPayload, jwtDecode } from 'jwt-decode'
 
 const protectedRoutes:Array<string> = ['/chat'];
 
-const publicRoutes = ['/login', '/register']
+const publicRoutes = ['/login', '/register','/']
  
 export default async function middleware(req: NextRequest) {
 
@@ -18,7 +18,7 @@ export default async function middleware(req: NextRequest) {
 
   // 5. Redirect to /login if the user is not authenticated
   if (isProtectedRoute &&  accessToken ==="" ) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
+    return NextResponse.redirect(new URL('/', req.nextUrl))
   }
   if( accessToken !== ""){
     const decoded: any = jwtDecode<JwtPayload>(accessToken);
